@@ -1,13 +1,28 @@
 import { describe, it } from 'vitest';
 import { render, screen } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
 
-import App from './App';
+import { WrappedApp, App } from './App';
 
 describe('App', () => {
-  it('renders the app', () => {
-    render(<App />);
+  it('Renders React + Vite + Typescript', () => {
+    render(<WrappedApp />);
     expect(
-      screen.getByText('Vite + React + TS Boilerplate')
-    ).toBeInTheDocument();
+      screen.getByRole('heading', {
+        level: 1,
+      })
+    ).toHaveTextContent('React + Vite + Typescript');
+  });
+  it('Renders not found if invalid path', () => {
+    render(
+      <MemoryRouter initialEntries={['/this-route-does-not-exist']}>
+        <App />
+      </MemoryRouter>
+    );
+    expect(
+      screen.getByRole('heading', {
+        level: 1,
+      })
+    ).toHaveTextContent('Not Found');
   });
 });
